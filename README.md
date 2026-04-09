@@ -1,118 +1,110 @@
-DNA_CALC – Tumor DNA Section Estimation Calculator
+DNA_CALC – Tumor DNA Section Estimation Calculator (Updated)
 Author: Richard Siderits
 
 ------------------------------------------------------------
 PURPOSE
 ------------------------------------------------------------
-This calculator estimates the number of 10-micron FFPE (formalin-
-fixed paraffin-embedded) tumor tissue sections required to ensure
-a minimum of 100 nanograms of evaluable tumor DNA for downstream
-next-generation sequencing (NGS).
+This calculator estimates the number of 10-micron FFPE tumor
+sections required to reach a user-selected genomic DNA target
+(100–500 ng) for next-generation sequencing (NGS).
 
-The model uses geometric assumptions and biologic approximations
-to estimate tumor cell counts and DNA yield based on specimen
-characteristics and laboratory performance parameters.
+It provides a geometry-based estimate of tumor DNA yield and
+translates that into a practical sectioning recommendation.
 
-This tool is intended for specimen triage, planning, and workflow
-standardization in molecular pathology and research laboratories.
+------------------------------------------------------------
+KEY CONVERSION LOGIC
+------------------------------------------------------------
+• 1 diploid cell ≈ 6 picograms (pg) DNA  
+• 6 pg = 0.006 nanograms (ng)  
+• 1 ng = 1000 pg  
+
+NGS requirements are expressed in nanograms, so all calculations
+are converted to ng before determining required sections.
+
+------------------------------------------------------------
+IMPORTANT OUTPUT DISTINCTION
+------------------------------------------------------------
+The calculator provides TWO related but different DNA outputs:
+
+1. Total tumor DNA from 100µm depth (10 sections combined, ng)
+   → Represents DNA yield from a stack of ten 10µm sections
+
+2. Tumor DNA per 10µm section (ng)
+   → Represents DNA yield from a SINGLE section
+   → THIS is the value used to calculate required sections
+
+Relationship:
+100µm value = 10 × (10µm section value)
 
 ------------------------------------------------------------
 FEATURES
 ------------------------------------------------------------
-• Calculates estimated tumor cell count based on tumor size and
-  average cell size (spherical geometry assumption)
-
-• Adjusts tumor cell count based on percent tumor-induced stroma
-
-• Estimates total tumor DNA using a diploid approximation of
-  6 picograms DNA per cell
-
-• Models DNA yield from a 100-micron tissue depth (equivalent to
-  ten 10-micron sections)
-
-• Applies laboratory-specific DNA extraction efficiency
-
-• Converts DNA yield into nanograms per 10-micron section
-
-• Determines the minimum number of 10-micron sections required
-  to achieve ≥100 ng of tumor DNA
-
-• Provides report-ready output for direct use in documentation
-
-• Includes a “Copy Results for Report” function for easy transfer
-  into laboratory reports or study records
+• Tumor cell estimation using spherical geometry
+• Adjustment for tumor-induced stroma
+• DNA estimation using 6 pg per cell
+• Extraction efficiency correction
+• DNA yield modeling per 100µm and per 10µm section
+• User-selectable NGS DNA target (100–500 ng)
+• Automatic calculation of required section count
+• Copy-ready report output
 
 ------------------------------------------------------------
 INPUT PARAMETERS
 ------------------------------------------------------------
-1. Tumor Size (mm)
-   Estimated largest dimension of tumor tissue
-
-2. Average Tumor Cell Size (µm)
-   Approximate diameter of tumor cells
-
-3. Percent Stroma (%)
-   Proportion of tumor-induced stroma within the sample
-
-4. Percent Stromal Cellularity (%)
-   Cellular fraction of stromal component (informational)
-
-5. Extraction Efficiency (%)
-   Estimated DNA recovery efficiency of the laboratory method
+• Tumor size (mm)
+• Average tumor cell size (µm)
+• Percent stroma (%)
+• Percent stromal cellularity (%)
+• Extraction efficiency (%)
+• Target DNA for NGS (100–500 ng)
 
 ------------------------------------------------------------
 OUTPUTS
 ------------------------------------------------------------
-• Estimated number of tumor cells (pure tumor)
-
-• Stroma-compensated tumor cell count
-
-• Total tumor DNA (picograms)
-
-• DNA yield from a 100µm sample (pg and ng)
-
-• DNA yield per 10µm section (ng)
-
-• Required number of 10µm sections to achieve ≥100 ng DNA
+• Estimated tumor cell count
+• Stroma-adjusted tumor cell count
+• Total tumor DNA (pg)
+• DNA from 100µm depth (ng)
+• DNA per 10µm section (ng)
+• Required number of 10µm sections
 
 ------------------------------------------------------------
-HOW TO USE
+HOW THE CALCULATION WORKS
 ------------------------------------------------------------
-1. Enter all required input values
-2. Click “Calculate”
-3. Review calculated outputs
-4. Click “Copy Results for Report” to generate formatted text
-5. Paste results into your report or documentation system
+1. Tumor size converted from mm → µm
+2. Tumor and cells modeled as spheres
+3. Cell count = tumor volume / cell volume
+4. Tumor fraction adjusted for stroma
+5. DNA estimated at 6 pg per cell
+6. 100µm depth modeled (10 sections)
+7. Extraction efficiency applied
+8. pg → ng conversion performed
+9. DNA per 10µm section calculated
+10. Sections required:
+
+   sections = ceil(target ng / ng per section)
 
 ------------------------------------------------------------
 INTERPRETATION
 ------------------------------------------------------------
-The calculated number of sections represents a conservative
-estimate based on:
-
-• Spherical tumor geometry
+The section count is a conservative estimate assuming:
 • Uniform tumor distribution
-• Diploid DNA content (6 pg/cell)
-• Enhanced-for-tumor sampling assumption
+• Diploid DNA content
+• Representative sampling
+• Accurate efficiency estimate
 
-The result ensures adequate DNA yield under expected laboratory
-conditions, accounting for extraction efficiency.
+Only the **per 10µm section DNA value** drives the section count.
 
 ------------------------------------------------------------
 LIMITATIONS
 ------------------------------------------------------------
-• Assumes uniform tumor composition and cell size
+• Assumes uniform tumor composition
 • Does not account for necrosis or heterogeneity
-• Stromal DNA is not used in section calculation
-• Real-world DNA yield may vary based on fixation,
-  processing, and extraction conditions
+• Based on geometric approximations
+• Actual yield varies with fixation and processing
 
 ------------------------------------------------------------
 DISCLAIMER
 ------------------------------------------------------------
-This calculator is intended for planning and estimation only.
-It does not replace direct measurement of extracted DNA quantity
-or quality prior to sequencing.
-
-Final suitability for NGS must be confirmed by laboratory QC
-metrics and validated assay requirements.
+This tool is for planning purposes only. Final DNA adequacy
+must be confirmed by direct measurement and laboratory QC.
